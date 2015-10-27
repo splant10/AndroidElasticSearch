@@ -111,9 +111,9 @@ public class MainActivity extends Activity {
         // http://stackoverflow.com/questions/4531396/get-value-of-a-edit-text-field
         EditText editBox = (EditText) findViewById(R.id.editText1);
         String arg = editBox.getText().toString();
-        SearchThread thread = new SearchThread("*");
-        if (arg != null) {
-            thread = new SearchThread(editBox.getText().toString());
+        SearchThread thread = new SearchThread(arg);
+        if (arg.equals(null) || arg.equals("")) {
+            thread = new SearchThread("*");
         }
 
         thread.start();
