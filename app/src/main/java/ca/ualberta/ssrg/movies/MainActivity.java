@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 import ca.ualberta.ssrg.androidelasticsearch.R;
@@ -42,7 +43,7 @@ public class MainActivity extends Activity {
 		movies = new Movies();
 		moviesViewAdapter = new ArrayAdapter<Movie>(this, R.layout.list_item,movies);
 		movieList.setAdapter(moviesViewAdapter);
-		movieManager = new ESMovieManager("");
+		movieManager = new ESMovieManager("*");
 
 		// Show details when click on a movie
 		movieList.setOnItemClickListener(new OnItemClickListener() {
@@ -74,11 +75,10 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
-		
 
-		// Refresh the list when visible
-		// TODO: Search all
+        SearchThread thread = new SearchThread("*");
+
+        thread.start();
 		
 	}
 	
@@ -92,7 +92,7 @@ public class MainActivity extends Activity {
 				moviesViewAdapter.notifyDataSetChanged();
 			}
 		};
-		
+
 		runOnUiThread(doUpdateGUIList);
 	}
 
@@ -106,6 +106,17 @@ public class MainActivity extends Activity {
 		// TODO: Extract search query from text view
 		
 		// TODO: Run the search thread
+
+
+        // http://stackoverflow.com/questions/4531396/get-value-of-a-edit-text-field
+        EditText editBox = (EditText) findViewById(R.id.editText1);
+        String arg = editBox.getText().toString();
+        SearchThread thread = new SearchThread("*");
+        if (arg != null) {
+            thread = new SearchThread(editBox.getText().toString());
+        }
+
+        thread.start();
 		
 	}
 	
@@ -132,7 +143,19 @@ public class MainActivity extends Activity {
 
 	class SearchThread extends Thread {
 		// TODO: Implement search thread
-		
+        private String search;
+
+        public SearchThread(String search) {
+            this.search = search;
+        }
+
+        @Override
+        public void run() {
+            movies.clear();
+            movies.addAll(movieManager.searchMovies(search, null));
+            notifyUpdated();
+
+        }
 	}
 
 	

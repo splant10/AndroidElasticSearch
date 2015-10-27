@@ -36,7 +36,7 @@ public class ESMovieManager {
 
 	public ESMovieManager(String search) {
 		gson = new Gson();
-		searchMovies(search, null);
+		// searchMovies(search, null);
 	}
 
 	/**
@@ -81,7 +81,7 @@ public class ESMovieManager {
 	 * Get movies with the specified search string. If the search does not
 	 * specify fields, it searches on all the fields.
 	 */
-	public void searchMovies(String searchString, String field) {
+	public Movies searchMovies(String searchString, String field) {
 		Movies result = new Movies();
 
 		/**
@@ -126,9 +126,10 @@ public class ESMovieManager {
 		 */
 		Type searchResponseType = new TypeToken<SearchResponse<Movie>>() {
 		}.getType();
-		
+
+		SearchResponse<Movie> esResponse;
 		try {
-			SearchResponse<Movie> esResponse = gson.fromJson(
+			esResponse = gson.fromJson(
 					new InputStreamReader(response.getEntity().getContent()),
 					searchResponseType);
 		} catch (JsonIOException e) {
@@ -143,6 +144,12 @@ public class ESMovieManager {
 		
 		// Extract the movies from the esResponse and put them in result
 
-		movies.notifyObservers();
+		for (SearchHit<Movie> hit : esResponse.getHits().getHits()) {
+			result.add(hit.getSource());
+		}
+
+		result.notifyObservers();
+
+		return result;
 	}
 }

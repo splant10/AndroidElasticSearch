@@ -1,0 +1,15 @@
+{
+	"id": 1,
+	"title": "The Dark Knight",
+	"direction": "Christopher Nolan",
+	"badguy": "The Joker",
+	"year": 2008	
+}
+
+{
+	"query": {
+		"query_string": {
+			"query": "darth"
+		}
+	}
+}

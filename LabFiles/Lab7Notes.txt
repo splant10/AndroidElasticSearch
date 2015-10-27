@@ -1,0 +1,37 @@
+Elastic search lab:
+
+http://cmput301.softwareprocess.es:8080/
+
+http://server  /index     /type        /id
+http://cmput301/teamnumber/typeofobject/somenumber
+
+
+// Just copy the json format into terminal after -d'
+curl -XPUT "http://cmput301.softwareprocess.es:8080/testing/movie/1" -d'{
+> "id": 1,
+> "title": "The Dark Knight",
+> "direction": "Christopher Nolan",
+> "badguy": "The Joker",
+> "year": 2008
+> }
+> '
+
+curl -XGET "http://cmput301.softwareprocess.es:8080/testing/movie/1"
+
+curl -XDELETE "http://cmput301.softwareprocess.es:8080/testing/movie/1"
+
+curl -XPOST "http://cmput301.softwareprocess.es:8080/testing/movie/_search" -d'{{
+	"query": {
+		"query_string": {
+			"query": "darth"
+		}
+	}
+}
+}
+'
+
+
+
+In AndroidManifest.xml: make sure to have
+<uses-permission android:name="android.permission.INTERNET" />
+
